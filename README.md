@@ -1,6 +1,6 @@
-Project Documentation
-Project Title
-MMU RHSF Fellowship Management System
+# Project Documentation
+## Project Title
+### MMU RHSF Fellowship Management System
 
 Description
 This database system is designed for the Multimedia University Repentance and Holiness Student Fellowship (RHSF) to manage their members, track attendance at various events, organize fellowship activities, and monitor spiritual growth of members. The system provides a comprehensive solution for:
