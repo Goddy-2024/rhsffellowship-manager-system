@@ -1,14 +1,45 @@
-# Welcome to your Lovable project
+Project Documentation
+Project Title
+MMU RHSF Fellowship Management System
 
-## Project info
+Description
+This database system is designed for the Multimedia University Repentance and Holiness Student Fellowship (RHSF) to manage their members, track attendance at various events, organize fellowship activities, and monitor spiritual growth of members. The system provides a comprehensive solution for:
 
-**URL**: https://lovable.dev/projects/46bd5419-a497-44ad-af50-1da13c0445ea
+Member registration and management
+Event planning and attendance tracking
+Departmental service assignments
+Spiritual follow-up and growth monitoring
+Testimony recording and announcement dissemination
+How to Setup and Run
+Ensure you have MySQL installed on your system
+Create a new database (or use an existing one)
+Execute the provided SQL script to create all tables and relationships
+The database is now ready for use with your application
+ER Diagram Description
+The database consists of 10 interrelated tables:
 
-## How can I edit this code?
+members: Core table storing all member information
+events: Records all fellowship events and activities
+attendance: Tracks member participation in events
+departments: Manages different service departments
+member_departments: Junction table for many-to-many relationship between members and departments
+testimonies: Stores member spiritual testimonies
+follow_ups: Tracks spiritual follow-up activities
+announcements: Manages fellowship announcements
+member_exits: Records information about members who leave
+spiritual_growth: Monitors members' spiritual development
+Relationships include:
 
-There are several ways of editing your application.
-
-**Use Lovable**
+One-to-many: Members to Events (through attendance)
+Many-to-many: Members to Departments (through member_departments)
+One-to-one: Members to their exit records (if applicable)
+Implementation Notes
+The database is normalized to 3NF with appropriate constraints
+All tables include proper primary and foreign key relationships
+Data integrity is enforced through constraints and checks
+Indexes are created for performance optimization on frequently queried columns
+The design accommodates all the fellowship activities mentioned in your requirements
+This implementation provides a solid foundation for building a complete fellowship management system that can scale as the ministry grows.
 
 Simply visit the [Lovable Project](https://lovable.dev/projects/46bd5419-a497-44ad-af50-1da13c0445ea) and start prompting.
 
