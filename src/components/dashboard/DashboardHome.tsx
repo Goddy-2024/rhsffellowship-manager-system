@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { users, calendar, user-plus, bar-chart } from "lucide-react";
+import { Users, Calendar, UserPlus, BarChart } from "lucide-react";
 
 export function DashboardHome() {
   const stats = [
@@ -8,28 +8,28 @@ export function DashboardHome() {
       title: "Total Members",
       value: "145",
       description: "Active fellowship members",
-      icon: users,
+      icon: Users,
       color: "text-blue-600",
     },
     {
       title: "This Month's Events",
       value: "8",
       description: "Scheduled activities",
-      icon: calendar,
+      icon: Calendar,
       color: "text-green-600",
     },
     {
       title: "New Members",
       value: "12",
       description: "Joined this month",
-      icon: user-plus,
+      icon: UserPlus,
       color: "text-purple-600",
     },
     {
       title: "Attendance Rate",
       value: "78%",
       description: "Average event attendance",
-      icon: bar-chart,
+      icon: BarChart,
       color: "text-orange-600",
     },
   ];

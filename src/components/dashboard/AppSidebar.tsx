@@ -1,5 +1,4 @@
-
-import { users, calendar, bar-chart, settings } from "lucide-react";
+import { Users, Calendar, BarChart, Settings } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -20,22 +19,22 @@ interface AppSidebarProps {
 const menuItems = [
   {
     title: "Dashboard",
-    icon: bar-chart,
+    icon: BarChart,
     key: "dashboard",
   },
   {
     title: "Members",
-    icon: users,
+    icon: Users,
     key: "members",
   },
   {
     title: "Events",
-    icon: calendar,
+    icon: Calendar,
     key: "events",
   },
   {
     title: "Reports",
-    icon: bar-chart,
+    icon: BarChart,
     key: "reports",
   },
 ];

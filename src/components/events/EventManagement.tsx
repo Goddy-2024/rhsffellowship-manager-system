@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { AddEventDialog } from "./AddEventDialog";
-import { search, plus, calendar } from "lucide-react";
+import { Search, Plus, Calendar } from "lucide-react";
 
 interface Event {
   id: number;
@@ -93,7 +92,7 @@ export function EventManagement() {
           </p>
         </div>
         <Button onClick={() => setShowAddDialog(true)}>
-          <plus className="mr-2 h-4 w-4" />
+          <Plus className="mr-2 h-4 w-4" />
           Add Event
         </Button>
       </div>
@@ -106,7 +105,7 @@ export function EventManagement() {
           </CardDescription>
           <div className="flex items-center space-x-2">
             <div className="relative flex-1 max-w-sm">
-              <search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search events..."
                 value={searchTerm}
@@ -146,7 +145,7 @@ export function EventManagement() {
                   </TableCell>
                   <TableCell>
                     <Button variant="ghost" size="sm">
-                      <calendar className="h-4 w-4" />
+                      <Calendar className="h-4 w-4" />
                     </Button>
                   </TableCell>
                 </TableRow>

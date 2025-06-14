@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { AddMemberDialog } from "./AddMemberDialog";
-import { search, user-plus, edit } from "lucide-react";
+import { Search, UserPlus, Edit } from "lucide-react";
 
 interface Member {
   id: number;
@@ -76,7 +75,7 @@ export function MemberManagement() {
           </p>
         </div>
         <Button onClick={() => setShowAddDialog(true)}>
-          <user-plus className="mr-2 h-4 w-4" />
+          <UserPlus className="mr-2 h-4 w-4" />
           Add Member
         </Button>
       </div>
@@ -89,7 +88,7 @@ export function MemberManagement() {
           </CardDescription>
           <div className="flex items-center space-x-2">
             <div className="relative flex-1 max-w-sm">
-              <search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search members..."
                 value={searchTerm}
@@ -127,7 +126,7 @@ export function MemberManagement() {
                   </TableCell>
                   <TableCell>
                     <Button variant="ghost" size="sm">
-                      <edit className="h-4 w-4" />
+                      <Edit className="h-4 w-4" />
                     </Button>
                   </TableCell>
                 </TableRow>

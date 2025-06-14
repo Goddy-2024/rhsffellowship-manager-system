@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Bar, BarChart, Line, LineChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
-import { file-text } from "lucide-react";
+import { FileText } from "lucide-react";
 import { useState } from "react";
 
 const attendanceData = [
@@ -70,7 +70,7 @@ export function Reports() {
             </SelectContent>
           </Select>
           <Button onClick={generateReport}>
-            <file-text className="mr-2 h-4 w-4" />
+            <FileText className="mr-2 h-4 w-4" />
             Generate Report
           </Button>
         </div>
