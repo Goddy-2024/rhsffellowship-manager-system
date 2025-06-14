@@ -1,14 +1,16 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { useState } from "react";
+import { LoginForm } from "@/components/auth/LoginForm";
+import { AdminDashboard } from "@/components/dashboard/AdminDashboard";
 
 const Index = () => {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
-  );
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  if (!isAuthenticated) {
+    return <LoginForm onLogin={() => setIsAuthenticated(true)} />;
+  }
+
+  return <AdminDashboard />;
 };
 
 export default Index;
