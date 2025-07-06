@@ -1,38 +1,71 @@
 
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Calendar, UserPlus, BarChart } from "lucide-react";
+import { getMembers, getEvents } from "@/utils/localStorage";
 
 export function DashboardHome() {
+  const [members, setMembers] = useState<any[]>([]);
+  const [events, setEvents] = useState<any[]>([]);
+
+  useEffect(() => {
+    setMembers(getMembers());
+    setEvents(getEvents());
+  }, []);
+
+  const activeMembers = members.filter(member => member.status === "Active");
+  const thisMonthEvents = events.filter(event => {
+    const eventDate = new Date(event.date);
+    const now = new Date();
+    return eventDate.getMonth() === now.getMonth() && eventDate.getFullYear() === now.getFullYear();
+  });
+
+  const newMembersThisMonth = members.filter(member => {
+    const joinDate = new Date(member.joinDate);
+    const now = new Date();
+    return joinDate.getMonth() === now.getMonth() && joinDate.getFullYear() === now.getFullYear();
+  });
+
   const stats = [
     {
       title: "Total Members",
-      value: "145",
+      value: members.length.toString(),
       description: "Active fellowship members",
       icon: Users,
       color: "text-blue-600",
     },
     {
       title: "This Month's Events",
-      value: "8",
+      value: thisMonthEvents.length.toString(),
       description: "Scheduled activities",
       icon: Calendar,
       color: "text-green-600",
     },
     {
       title: "New Members",
-      value: "12",
+      value: newMembersThisMonth.length.toString(),
       description: "Joined this month",
       icon: UserPlus,
       color: "text-purple-600",
     },
     {
-      title: "Attendance Rate",
-      value: "78%",
-      description: "Average event attendance",
+      title: "Active Members",
+      value: activeMembers.length.toString(),
+      description: "Currently active",
       icon: BarChart,
       color: "text-orange-600",
     },
   ];
+
+  const recentEvents = events
+    .filter(event => event.status === "Completed")
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 3);
+
+  const upcomingEvents = events
+    .filter(event => event.status === "Upcoming")
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    .slice(0, 3);
 
   return (
     <div className="space-y-6">
@@ -70,30 +103,20 @@ export function DashboardHome() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex items-center space-x-4">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Sunday Service</p>
-                  <p className="text-xs text-gray-500">120 attendees</p>
-                </div>
-                <span className="text-xs text-gray-400">2 days ago</span>
-              </div>
-              <div className="flex items-center space-x-4">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Bible Study</p>
-                  <p className="text-xs text-gray-500">85 attendees</p>
-                </div>
-                <span className="text-xs text-gray-400">5 days ago</span>
-              </div>
-              <div className="flex items-center space-x-4">
-                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Prayer Meeting</p>
-                  <p className="text-xs text-gray-500">67 attendees</p>
-                </div>
-                <span className="text-xs text-gray-400">1 week ago</span>
-              </div>
+              {recentEvents.length > 0 ? (
+                recentEvents.map((event, index) => (
+                  <div key={event.id} className="flex items-center space-x-4">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">{event.name}</p>
+                      <p className="text-xs text-gray-500">{event.expectedAttendees} expected attendees</p>
+                    </div>
+                    <span className="text-xs text-gray-400">{event.date}</span>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-gray-500">No recent activities</p>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -105,33 +128,21 @@ export function DashboardHome() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium">Youth Conference</p>
-                  <p className="text-xs text-gray-500">Dec 15, 2024</p>
-                </div>
-                <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                  Upcoming
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium">Christmas Service</p>
-                  <p className="text-xs text-gray-500">Dec 25, 2024</p>
-                </div>
-                <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
-                  Confirmed
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium">New Year Service</p>
-                  <p className="text-xs text-gray-500">Jan 1, 2025</p>
-                </div>
-                <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">
-                  Planning
-                </span>
-              </div>
+              {upcomingEvents.length > 0 ? (
+                upcomingEvents.map((event) => (
+                  <div key={event.id} className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium">{event.name}</p>
+                      <p className="text-xs text-gray-500">{event.date} at {event.time}</p>
+                    </div>
+                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                      {event.status}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-gray-500">No upcoming events</p>
+              )}
             </div>
           </CardContent>
         </Card>

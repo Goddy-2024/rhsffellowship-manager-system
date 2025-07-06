@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,49 +7,17 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { AddMemberDialog } from "./AddMemberDialog";
 import { Search, UserPlus, Edit } from "lucide-react";
-
-interface Member {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  department: string;
-  joinDate: string;
-  status: "Active" | "Inactive";
-}
+import { getMembers, addMember, type Member } from "@/utils/localStorage";
+import { toast } from "@/components/ui/sonner";
 
 export function MemberManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const [members, setMembers] = useState<Member[]>([
-    {
-      id: 1,
-      name: "John Doe",
-      email: "john@example.com",
-      phone: "+60123456789",
-      department: "Worship",
-      joinDate: "2024-01-15",
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "jane@example.com",
-      phone: "+60123456790",
-      department: "Youth",
-      joinDate: "2024-02-10",
-      status: "Active",
-    },
-    {
-      id: 3,
-      name: "Mike Johnson",
-      email: "mike@example.com",
-      phone: "+60123456791",
-      department: "Media",
-      joinDate: "2024-03-05",
-      status: "Inactive",
-    },
-  ]);
+  const [members, setMembers] = useState<Member[]>([]);
+
+  useEffect(() => {
+    setMembers(getMembers());
+  }, []);
 
   const filteredMembers = members.filter(member =>
     member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -56,13 +25,15 @@ export function MemberManagement() {
     member.department.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleAddMember = (newMember: Omit<Member, "id">) => {
-    const member: Member = {
-      ...newMember,
-      id: Math.max(...members.map(m => m.id)) + 1,
-    };
-    setMembers([...members, member]);
-    setShowAddDialog(false);
+  const handleAddMember = (newMemberData: Omit<Member, "id">) => {
+    try {
+      const newMember = addMember(newMemberData);
+      setMembers(getMembers());
+      setShowAddDialog(false);
+      toast("Member added successfully!");
+    } catch (error) {
+      toast("Failed to add member. Please try again.");
+    }
   };
 
   return (
