@@ -5,13 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Bar, BarChart, Line, LineChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
 import { FileText } from "lucide-react";
-import { getMembers, getEvents } from "@/utils/localStorage";
+import { getMembers, getEvents, type Member, type Event } from "@/utils/localStorage";
 import { toast } from "@/components/ui/sonner";
 
 export function Reports() {
   const [selectedMonth, setSelectedMonth] = useState("current");
-  const [members, setMembers] = useState<any[]>([]);
-  const [events, setEvents] = useState<any[]>([]);
+  const [members, setMembers] = useState<Member[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
     setMembers(getMembers());
@@ -29,10 +29,10 @@ export function Reports() {
   ];
 
   // Generate department data
-  const departmentCounts = members.reduce((acc, member) => {
+  const departmentCounts: Record<string, number> = members.reduce((acc, member) => {
     acc[member.department] = (acc[member.department] || 0) + 1;
     return acc;
-  }, {});
+  }, {} as Record<string, number>);
 
   const departmentData = Object.entries(departmentCounts).map(([department, count]) => ({
     department,
