@@ -1,4 +1,5 @@
-import { Users, Calendar, BarChart, Settings } from "lucide-react";
+
+import { Users, Calendar, BarChart } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -10,11 +11,6 @@ import {
   SidebarMenuItem,
   SidebarHeader,
 } from "@/components/ui/sidebar";
-
-interface AppSidebarProps {
-  activeTab: string;
-  setActiveTab: (tab: string) => void;
-}
 
 const menuItems = [
   {
@@ -39,7 +35,7 @@ const menuItems = [
   },
 ];
 
-export function AppSidebar({ activeTab, setActiveTab }: AppSidebarProps) {
+export function AppSidebar({ activeTab, setActiveTab }) {
   return (
     <Sidebar>
       <SidebarHeader className="border-b px-6 py-4">
