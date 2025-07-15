@@ -1,58 +1,40 @@
 
-import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Bar, BarChart, Line, LineChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
 import { FileText } from "lucide-react";
-import { getMembers, getEvents, type Member, type Event } from "@/utils/localStorage";
-import { toast } from "@/components/ui/sonner";
+import { useState } from "react";
+
+const attendanceData = [
+  { month: "Jan", attendance: 120 },
+  { month: "Feb", attendance: 135 },
+  { month: "Mar", attendance: 128 },
+  { month: "Apr", attendance: 145 },
+  { month: "May", attendance: 152 },
+  { month: "Jun", attendance: 148 },
+];
+
+const departmentData = [
+  { department: "Worship", members: 25 },
+  { department: "Youth", members: 40 },
+  { department: "Media", members: 15 },
+  { department: "Ushering", members: 20 },
+  { department: "Prayer", members: 18 },
+  { department: "Outreach", members: 22 },
+];
 
 export function Reports() {
   const [selectedMonth, setSelectedMonth] = useState("current");
-  const [members, setMembers] = useState<Member[]>([]);
-  const [events, setEvents] = useState<Event[]>([]);
-
-  useEffect(() => {
-    setMembers(getMembers());
-    setEvents(getEvents());
-  }, []);
-
-  // Generate attendance data based on events
-  const attendanceData = [
-    { month: "Jul", attendance: events.filter(e => e.date.includes('2024-07')).length * 35 },
-    { month: "Aug", attendance: events.filter(e => e.date.includes('2024-08')).length * 42 },
-    { month: "Sep", attendance: events.filter(e => e.date.includes('2024-09')).length * 38 },
-    { month: "Oct", attendance: events.filter(e => e.date.includes('2024-10')).length * 45 },
-    { month: "Nov", attendance: events.filter(e => e.date.includes('2024-11')).length * 52 },
-    { month: "Dec", attendance: events.filter(e => e.date.includes('2024-12')).length * 48 },
-  ];
-
-  // Generate department data
-  const departmentCounts: Record<string, number> = members.reduce((acc, member) => {
-    acc[member.department] = (acc[member.department] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
-
-  const departmentData = Object.entries(departmentCounts).map(([department, count]) => ({
-    department,
-    members: count,
-  }));
 
   const generateReport = () => {
-    const activeMembers = members.filter(m => m.status === "Active");
-    const completedEvents = events.filter(e => e.status === "Completed");
-    const upcomingEvents = events.filter(e => e.status === "Upcoming");
-    
+    // Simulate report generation
     const reportData = {
-      totalMembers: members.length,
-      activeMembers: activeMembers.length,
-      inactiveMembers: members.length - activeMembers.length,
-      totalEvents: events.length,
-      completedEvents: completedEvents.length,
-      upcomingEvents: upcomingEvents.length,
-      departments: departmentCounts,
-      generatedAt: new Date().toISOString(),
+      totalMembers: 145,
+      activeMembers: 138,
+      newMembers: 12,
+      events: 8,
+      avgAttendance: 78,
     };
 
     const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
@@ -64,16 +46,7 @@ export function Reports() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    
-    toast("Report generated successfully!");
   };
-
-  const activeMembers = members.filter(m => m.status === "Active");
-  const thisMonthEvents = events.filter(event => {
-    const eventDate = new Date(event.date);
-    const now = new Date();
-    return eventDate.getMonth() === now.getMonth() && eventDate.getFullYear() === now.getFullYear();
-  });
 
   return (
     <div className="space-y-6">
@@ -156,19 +129,19 @@ export function Reports() {
             <div className="space-y-4">
               <div className="flex justify-between">
                 <span className="text-sm text-gray-600">Total Events:</span>
-                <span className="font-semibold">{thisMonthEvents.length}</span>
+                <span className="font-semibold">8</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Total Members:</span>
-                <span className="font-semibold">{members.length}</span>
+                <span className="text-sm text-gray-600">Total Attendance:</span>
+                <span className="font-semibold">624</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Active Members:</span>
-                <span className="font-semibold">{activeMembers.length}</span>
+                <span className="text-sm text-gray-600">Average per Event:</span>
+                <span className="font-semibold">78</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Departments:</span>
-                <span className="font-semibold">{Object.keys(departmentCounts).length}</span>
+                <span className="text-sm text-gray-600">New Members:</span>
+                <span className="font-semibold">12</span>
               </div>
             </div>
           </CardContent>
@@ -176,44 +149,51 @@ export function Reports() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Top Departments</CardTitle>
+            <CardTitle>Top Events</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {departmentData
-                .sort((a, b) => b.members - a.members)
-                .slice(0, 4)
-                .map((dept) => (
-                  <div key={dept.department} className="flex justify-between">
-                    <span className="text-sm">{dept.department}</span>
-                    <span className="text-sm font-medium">{dept.members} members</span>
-                  </div>
-                ))}
+              <div className="flex justify-between">
+                <span className="text-sm">Sunday Service</span>
+                <span className="text-sm font-medium">120 avg</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm">Bible Study</span>
+                <span className="text-sm font-medium">85 avg</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm">Prayer Meeting</span>
+                <span className="text-sm font-medium">67 avg</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm">Youth Conference</span>
+                <span className="text-sm font-medium">200 avg</span>
+              </div>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>Status Overview</CardTitle>
+            <CardTitle>Growth Metrics</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Active Members:</span>
-                <span className="font-semibold text-green-600">{activeMembers.length}</span>
+                <span className="text-sm text-gray-600">Member Growth:</span>
+                <span className="font-semibold text-green-600">+8.7%</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Inactive Members:</span>
-                <span className="font-semibold text-orange-600">{members.length - activeMembers.length}</span>
+                <span className="text-sm text-gray-600">Attendance Growth:</span>
+                <span className="font-semibold text-green-600">+12.3%</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Upcoming Events:</span>
-                <span className="font-semibold text-blue-600">{events.filter(e => e.status === "Upcoming").length}</span>
+                <span className="text-sm text-gray-600">Event Frequency:</span>
+                <span className="font-semibold text-blue-600">2.1/week</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Completed Events:</span>
-                <span className="font-semibold text-gray-600">{events.filter(e => e.status === "Completed").length}</span>
+                <span className="text-sm text-gray-600">Retention Rate:</span>
+                <span className="font-semibold text-green-600">94.2%</span>
               </div>
             </div>
           </CardContent>

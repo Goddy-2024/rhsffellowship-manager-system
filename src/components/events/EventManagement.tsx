@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,17 +6,53 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { AddEventDialog } from "./AddEventDialog";
 import { Search, Plus, Calendar } from "lucide-react";
-import { getEvents, addEvent, type Event } from "@/utils/localStorage";
-import { toast } from "@/components/ui/sonner";
+
+interface Event {
+  id: number;
+  name: string;
+  date: string;
+  time: string;
+  location: string;
+  type: string;
+  expectedAttendees: number;
+  status: "Upcoming" | "Completed" | "Cancelled";
+}
 
 export function EventManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const [events, setEvents] = useState<Event[]>([]);
-
-  useEffect(() => {
-    setEvents(getEvents());
-  }, []);
+  const [events, setEvents] = useState<Event[]>([
+    {
+      id: 1,
+      name: "Sunday Service",
+      date: "2024-12-15",
+      time: "09:00",
+      location: "Main Hall",
+      type: "Service",
+      expectedAttendees: 150,
+      status: "Upcoming",
+    },
+    {
+      id: 2,
+      name: "Bible Study",
+      date: "2024-12-18",
+      time: "19:00",
+      location: "Conference Room",
+      type: "Study",
+      expectedAttendees: 80,
+      status: "Upcoming",
+    },
+    {
+      id: 3,
+      name: "Youth Conference",
+      date: "2024-12-10",
+      time: "14:00",
+      location: "Main Hall",
+      type: "Conference",
+      expectedAttendees: 200,
+      status: "Completed",
+    },
+  ]);
 
   const filteredEvents = events.filter(event =>
     event.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -25,15 +60,13 @@ export function EventManagement() {
     event.location.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleAddEvent = (newEventData: Omit<Event, "id">) => {
-    try {
-      const newEvent = addEvent(newEventData);
-      setEvents(getEvents());
-      setShowAddDialog(false);
-      toast("Event added successfully!");
-    } catch (error) {
-      toast("Failed to add event. Please try again.");
-    }
+  const handleAddEvent = (newEvent: Omit<Event, "id">) => {
+    const event: Event = {
+      ...newEvent,
+      id: Math.max(...events.map(e => e.id)) + 1,
+    };
+    setEvents([...events, event]);
+    setShowAddDialog(false);
   };
 
   const getStatusColor = (status: string) => {
